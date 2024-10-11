@@ -1,0 +1,65 @@
+<html>
+  <head></head>
+  <style>
+    body {
+      overflow: hidden;
+    }
+
+    .container {
+      z-index: 1;
+      position: relative; /* Allow absolute positioning for dots */
+    }
+
+    .branch2Class {
+      position: relative;
+      z-index: 1;
+    }
+
+    .dot {
+      width: 20px; /* Dot size */
+      height: 20px; /* Dot size */
+      background-color: rgba(243, 122, 124, 0.4); /* Dot color */
+      border-radius: 50%; /* Make it round */
+      position: absolute; /* Position it absolutely */
+      z-index: 100000;
+      padding: 15px;
+      color:yellow;
+      font-size: 25px;
+    }
+
+    .feedback {
+      width: 600px;
+      height: 250px;
+      font-size:  15px;
+    }
+
+    .controlPanel {
+      padding: 10px;
+      background-color: antiquewhite;
+      z-index: 1000000;
+      position: absolute;
+      top: 600px;
+      left: 10px;
+      right: 10px;
+    }
+
+    .controlPanel select, button {
+      vertical-align: top;
+    }
+  </style>
+<body>
+  <div class="container">
+    <img id='branch1Image' src="about:blank">
+    <img id='branch2Image' src="about:blank" class="branch2Class">
+  </div>
+  <div class="controlPanel">
+    <button onclick="saveSettings()">save</button>
+    <select id="sheetSelect"></select>
+    <select id="branch1Select"></select>
+    <select id="branch2Select"></select>
+    <textarea id="feedback" class="feedback"></textarea>
+  </div>
+  <script src="./diff.js"></script>
+  <script src="./annotate.js"></script>
+  </body>
+</html>
