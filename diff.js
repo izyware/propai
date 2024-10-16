@@ -1,83 +1,38 @@
 var config = {};
-const currentView = {
+const userSettings = {};
+
+const globalModule = {};
+globalModule.currentView = {
   sheet: '',
   branch1: '',
   branch2: ''
 }
-const userSettings = {};
+globalModule.applyUserSettings = function(userSettings) {
+  console.log('[global]', userSettings);
+  for(let p in userSettings) {
+    globalModule[p] = userSettings[p];
+  }
+  for(let p in globalModule.currentView) {
+    document.getElementById(p + 'Select').value = globalModule.currentView[p];
+  }
+}
 
 function switchViews(changes) {
   if (changes) {
     for(p in changes) {
-      currentView[p] = changes[p];
+      globalModule.currentView[p] = changes[p];
     }
   }
-  document.getElementById('branch1Image').src=`${config.storePath}/${currentView.branch1}/images/${currentView.sheet}.diff.png`;
-  document.getElementById('branch2Image').src=`${config.storePath}/${currentView.branch2}/images/${currentView.sheet}.diff.png`;
+
+  document.getElementById('branch1Image').src=`${config.storePath}/${globalModule.currentView.branch1}/images/${globalModule.currentView.sheet}.png`;
+  document.getElementById('branch2Image').src=`${config.storePath}/${globalModule.currentView.branch2}/images/${globalModule.currentView.sheet}.png`;
   dotsModule.switchViews();
   applyUserSettings();
-}
-
-function applyUserSettings() {
-  console.log('[applyUserSettings]');
-  const userSettings = getUserSettings();
-  positionModule.applyUserSettings(userSettings);
-  dotsModule.applyUserSettings(userSettings);
-}
-
-const positionModule = {};
-positionModule.applyUserSettings = function(userSettings) {
-  for(let key in userSettings) {
-    value = userSettings[key];
-    switch(key) {
-      case 'top':
-      case 'left':
-        const element = document.getElementById('branch2Image');
-        element.style[key] = value + 'px';
-        break;
-    }
-  }
-}
-
-function getUserSetting(key) {
-  const path = `${currentView.sheet}/${currentView.branch1}/${currentView.branch2}/${key}`;
-  return userSettings[path];
-}
-
-function setUserSetting(key, value) {
-  const path = `${currentView.sheet}/${currentView.branch1}/${currentView.branch2}/${key}`;
-  console.log('[setUserSetting]', { path, value });
-  userSettings[path] = value;
-}
-
-function incrementUserSetting(key, value) {
-  if (!value) value = 1;
-  const path = `${currentView.sheet}/${currentView.branch1}/${currentView.branch2}/${key}`;
-  if (!userSettings[path]) userSettings[path] = 0;
-  userSettings[path] += value;
-  return userSettings[path];
-}
-
-function getUserSettings() {
-  const ret = {};
-  const path = `${currentView.sheet}/${currentView.branch1}/${currentView.branch2}/`;
-  for(let p in userSettings) {
-    if (p.indexOf(path) == 0) {
-      ret[p.substr(path.length)] = userSettings[p];
-    }
-  }
-  return ret;
 }
 
 function toggle(str) {
   var element = document.getElementById(str);
   element.style.visibility = element.style.visibility == 'hidden' ? 'visible' : 'hidden';
-}
-
-function saveSettings() {
-  navigator.clipboard.writeText(JSON.stringify(userSettings, null, 2))
-  .then(() => alert('saved to clip board'))
-  .catch(err => alert(err));
 }
 
 document.onkeydown = function(event) {
@@ -118,7 +73,7 @@ function addOption(id, option) {
   newOption.value = option;
   newOption.textContent = option;
   select.appendChild(newOption);
-  if (select.children.length == 1) currentView[id.replace('Select', '')] = option;
+  if (select.children.length == 1) globalModule.currentView[id.replace('Select', '')] = option;
 }
 
 function initSelection() {

@@ -11,8 +11,13 @@
     }
 
     .branch2Class {
+      width: 1500px;
       position: relative;
       z-index: 1;
+    }
+
+    .branch1Class {
+      width: 1500px;
     }
 
     .dot {
@@ -49,7 +54,7 @@
   </style>
 <body>
   <div class="container">
-    <img id='branch1Image' src="about:blank">
+    <img id='branch1Image' src="about:blank" class="branch1Class">
     <img id='branch2Image' src="about:blank" class="branch2Class">
   </div>
   <div class="controlPanel">
@@ -59,7 +64,10 @@
     <select id="branch2Select"></select>
     <textarea id="feedback" class="feedback"></textarea>
   </div>
-  <script src="./diff.js"></script>
   <script src="./annotate.js"></script>
+  <script src="./settings.js"></script>
+  <script src="./position.js"></script>
+  <script src="./diff.js"></script>
+  
   </body>
 </html>
