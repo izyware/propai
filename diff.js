@@ -24,6 +24,8 @@ function switchViews(changes) {
     }
   }
 
+  setGlobalSetting('currentView', globalModule.currentView);
+
   document.getElementById('branch1Image').src=`${config.storePath}/${globalModule.currentView.branch1}/images/${globalModule.currentView.sheet}.png`;
   document.getElementById('branch2Image').src=`${config.storePath}/${globalModule.currentView.branch2}/images/${globalModule.currentView.sheet}.png`;
   dotsModule.switchViews();
@@ -52,7 +54,7 @@ document.onkeydown = function(event) {
       break;
     case 38:
       delta.top = -1;
-    break;
+      break;
     case 39:
       delta.left = 1;
       break;
@@ -62,7 +64,6 @@ document.onkeydown = function(event) {
   }
   incrementUserSetting('left', delta.left);
   incrementUserSetting('top', delta.top);
-
   element.style.left = (left + delta.left) + 'px';
   element.style.top = (top + delta.top) + 'px';
 };

@@ -23,7 +23,7 @@
     .dot {
       width: 20px; /* Dot size */
       height: 20px; /* Dot size */
-      background-color: rgba(243, 122, 124, 0.4); /* Dot color */
+      background-color: rgba(238, 28, 28, 0.4); /* Dot color */
       border-radius: 50%; /* Make it round */
       position: absolute; /* Position it absolutely */
       z-index: 100000;
@@ -35,7 +35,15 @@
     .feedback {
       width: 600px;
       height: 250px;
-      font-size:  15px;
+      font-size:  20px;
+      color: rgba(238, 28, 28);
+      padding: 5px 10px;
+
+    }
+
+    select {
+      font-size: 20px;
+      padding: 10px;
     }
 
     .controlPanel {
@@ -46,10 +54,23 @@
       top: 600px;
       left: 10px;
       right: 10px;
+      padding: 20px;
+      font-size: 30px;
     }
 
     .controlPanel select, button {
       vertical-align: top;
+    }
+    .sidebyside {
+      display:inline-block;
+      width: 700px;
+      vertical-align: top;
+      border: solid 1px black;
+      padding: 5px;
+    }
+    .labelSpan {
+      width: 200px;
+      display:inline-block;
     }
   </style>
 <body>
@@ -58,11 +79,17 @@
     <img id='branch2Image' src="about:blank" class="branch2Class">
   </div>
   <div class="controlPanel">
-    <button onclick="saveSettings()">save</button>
-    <select id="sheetSelect"></select>
-    <select id="branch1Select"></select>
-    <select id="branch2Select"></select>
-    <textarea id="feedback" class="feedback"></textarea>
+    <div class="sidebyside">
+      <span class="labelSpan"">Sheet</span><select style="position: relative;left: 8px;" id="sheetSelect"></select><br>
+      <span class="labelSpan">Black Lines</span> <select id="branch1Select"></select><br>
+      <span class="labelSpan" style="color: green;">Green Lines</span> <select id="branch2Select"></select>
+    </div>
+    <div class="sidebyside">
+      <label style="color: rgba(238, 28, 28);">Issues annotated by RED circles</label><br/>
+      <textarea id="feedback" class="feedback"></textarea>
+      <br/>
+      <button onclick="saveSettings()">save</button>
+    </div>
   </div>
   <script src="./annotate.js"></script>
   <script src="./settings.js"></script>

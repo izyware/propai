@@ -20,13 +20,13 @@ dotsModule.switchViews = function() {
     if (el) el.parentNode.removeChild(el);
   } while(el);
   setUserSetting('dotCounter', 0);
-  setUserSetting('feedback', document.getElementById('feedback').innerHTML);
+  setUserSetting('feedback', document.getElementById('feedback').value);
 }
 
 dotsModule.applyUserSettings = function(userSettings, deleteFirst) {
   for(let p in userSettings) {
     if (p == 'feedback') {
-      document.getElementById('feedback').innerHTML = userSettings[p];
+      document.getElementById('feedback').value = userSettings[p];
       continue;
     }
     if (p.indexOf(dotPrefix) != 0) continue;

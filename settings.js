@@ -35,8 +35,16 @@ function setUserSetting(key, value) {
   userSettings[path] = value;
 }
 
+function decrementUserSetting(key, value) {
+  if (!value) value = 0;
+  const path = `${globalModule.currentView.sheet}/${globalModule.currentView.branch1}/${globalModule.currentView.branch2}/${key}`;
+  if (!userSettings[path]) userSettings[path] = 0;
+  userSettings[path] -= value;
+  return userSettings[path];
+}
+
 function incrementUserSetting(key, value) {
-  if (!value) value = 1;
+  if (!value) value = 0;
   const path = `${globalModule.currentView.sheet}/${globalModule.currentView.branch1}/${globalModule.currentView.branch2}/${key}`;
   if (!userSettings[path]) userSettings[path] = 0;
   userSettings[path] += value;
@@ -55,7 +63,8 @@ function getUserSettings() {
 }
 
 function saveSettings() {
+  setUserSetting('feedback', document.getElementById('feedback').value);
   navigator.clipboard.writeText(JSON.stringify(userSettings, null, 2))
-  .then(() => alert('saved to clip board'))
+  .then(() => console.log('saved to clip board', userSettings))
   .catch(err => alert(err));
 }
