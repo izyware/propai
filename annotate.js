@@ -2,7 +2,7 @@
 var dotSize = 20;
 const dotPrefix = 'dot-';
 document.body.addEventListener('click', function(event) {
-  if (event.clientY > 500) return;
+  if (event.clientY > 1000) return;
   var dotCounter = incrementUserSetting('dotCounter', 1);
   setUserSetting(`${dotPrefix}${dotCounter}`, {
     left: (event.clientX - dotSize / 2 ),

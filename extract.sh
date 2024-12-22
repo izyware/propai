@@ -6,11 +6,16 @@ W="$4"
 Y="$5"
 DIR=$6;
 FLAGS=$7;
+if [ -z "$8" ]; then
+    H=$((W * 25 / 70 ))
+else
+    H=$8;
+fi
 echo $FLAGS;
 PDF_FILE=$DIR/main.pdf;
 TMP_DIR=$DIR/tmp;
 OUTPUT_FILE_PREFIX=$DIR/images/$NAME;
-H=$((W * 25 / 70 ))
+
 
 mkdir -p $TMP_DIR;
 rm -f $TMP_DIR/*;
