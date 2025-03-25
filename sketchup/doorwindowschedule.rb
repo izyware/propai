@@ -1,16 +1,41 @@
 # Declare a global variable to store the dialog reference
 $dialog = nil
 
-# Function to convert inches to feet and inches
+# Function to convert inches to a fraction with denominator 16
+def inches_to_fraction(inches)
+  # Get the whole number part
+  whole_inches = inches.to_i
+  # Get the fractional part
+  fraction = inches - whole_inches
+  # Convert the fractional part to the closest fraction with denominator 16
+  fraction_in_sixteenths = (fraction * 16).round
+  if fraction_in_sixteenths == 16
+    whole_inches += 1
+    fraction_in_sixteenths = 0
+  end
+
+  # If there's no fractional part, return the whole number inches
+  if fraction_in_sixteenths == 0
+    "#{whole_inches}\""
+  else
+    # Otherwise, return the whole number and the fraction (e.g., 5 1/16")
+    "#{whole_inches} #{fraction_in_sixteenths}/16\""
+  end
+end
+
+# Function to convert inches to feet and inches (with fractional inches)
 def inches_to_feet_and_inches(inches)
   feet = (inches / 12).to_i
-  remaining_inches = (inches % 12).round(2)
+  remaining_inches = inches % 12
+
+  # Convert remaining inches to fraction
+  inches_str = inches_to_fraction(remaining_inches)
+
+  # Return the formatted string
   if feet > 0
-    # If there's a full foot, return the result in feet and inches
-    "#{feet}' #{remaining_inches}\""
+    "#{feet}' #{inches_str}"
   else
-    # If no full foot, just return the inches
-    "#{remaining_inches}\""
+    inches_str
   end
 end
 
@@ -40,9 +65,13 @@ def create_or_reload_dialog
             var cell1 = row.insertCell(0);
             var cell2 = row.insertCell(1);
             var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+            var cell5 = row.insertCell(4);
             cell1.innerHTML = "Index";
             cell2.innerHTML = "Component Name";
-            cell3.innerHTML = "Dimensions (W x H x D)";
+            cell3.innerHTML = "Width (ft, in)";
+            cell4.innerHTML = "Height (ft, in)";
+            cell5.innerHTML = "Depth (ft, in)";
             
             // Add table rows for each component
             components.forEach(function(component, index) {
@@ -50,9 +79,13 @@ def create_or_reload_dialog
               var cell1 = row.insertCell(0);
               var cell2 = row.insertCell(1);
               var cell3 = row.insertCell(2);
+              var cell4 = row.insertCell(3);
+              var cell5 = row.insertCell(4);
               cell1.innerHTML = index + 1;
               cell2.innerHTML = component.name;
-              cell3.innerHTML = component.dimensions;
+              cell3.innerHTML = component.width;
+              cell4.innerHTML = component.height;
+              cell5.innerHTML = component.depth;
             });
           }
         </script>
@@ -69,7 +102,7 @@ def create_or_reload_dialog
   # Create a new dialog
   $dialog = UI::HtmlDialog.new({
     :dialog_title => "Component Names and Dimensions",
-    :width => 500,
+    :width => 600,
     :height => 400,
     :style => UI::HtmlDialog::STYLE_DIALOG,
     :resizable => true
@@ -91,22 +124,20 @@ def create_or_reload_dialog
         name = entity.name.empty? ? entity.definition.name : entity.name
         bounds = entity.bounds
 
-        # Convert dimensions from inches to feet and inches
+        # Convert dimensions from inches to feet and fractional inches
         width = inches_to_feet_and_inches(bounds.width)
         height = inches_to_feet_and_inches(bounds.height)
         depth = inches_to_feet_and_inches(bounds.depth)
 
-        dimensions = "#{width} x #{height} x #{depth}"
-        
         # Store component data (name and dimensions)
-        component_data << { "name" => name, "dimensions" => dimensions }
+        component_data << { "name" => name, "width" => width, "height" => height, "depth" => depth }
       end
     end
 
     # Sort components alphabetically by name
     component_data.sort_by! { |component| component["name"].downcase }
 
-    # Pass the sorted component data (name and dimensions) to JavaScript
+    # Pass the sorted component data (name, width, height, and depth) to JavaScript
     $dialog.execute_script("displayComponents(#{component_data.to_json});")
   end
 
